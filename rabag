@@ -1,0 +1,44 @@
+loadstring([[
+local P,U,T,R=game:GetService("Players"),game:GetService("UserInputService"),game:GetService("TextChatService"),game:GetService("RunService")
+local pl=P.LocalPlayer
+local sw,sh = workspace.CurrentCamera.ViewportSize.X, workspace.CurrentCamera.ViewportSize.Y
+local scale = math.min(sw/1920, sh/1080)
+
+local g=Instance.new("ScreenGui",pl:WaitForChild("PlayerGui")); g.Name="ChatGUI"
+local f=Instance.new("Frame",g); f.Size=UDim2.new(0,380*scale,0,500*scale); f.Position=UDim2.new(0.3,0,0.2,0); f.BackgroundColor3=Color3.fromRGB(20,0,50); f.BackgroundTransparency=0.2; f.BorderSizePixel=0; f.Visible=true
+
+-- Космос
+local sf=Instance.new("Frame",f); sf.Size=UDim2.new(1,0,1,0); sf.BackgroundTransparency=1
+local stars={}
+for i=1,120 do local s=Instance.new("Frame",sf); s.Size=UDim2.new(0,2*scale,0,2*scale); s.Position=UDim2.new(math.random(),0,math.random(),0); s.BackgroundColor3=Color3.fromRGB(200+math.random(55),100+math.random(100),255); s.BorderSizePixel=0; s.BackgroundTransparency=math.random(); table.insert(stars,{obj=s,speed=0.001+math.random()*0.003}) end
+R.RenderStepped:Connect(function() for _,sd in ipairs(stars) do local s=sd.obj; s.Position=s.Position+UDim2.new(0,0,sd.speed,0); if s.Position.Y.Scale>1 then s.Position=UDim2.new(math.random(),0,0,0) end; s.BackgroundTransparency=0.2+0.5*math.sin(tick()*math.random()*5) end end)
+
+-- Заголовок
+local title=Instance.new("TextLabel",f); title.Text="BST"; title.Size=UDim2.new(1,0,0,35*scale); title.Position=UDim2.new(0,0,0,0); title.TextScaled=true; title.BackgroundTransparency=1; title.TextColor3=Color3.new(1,1,1); title.Font=Enum.Font.GothamBold
+
+-- Крестик + надпись
+local cb=Instance.new("TextButton",f); cb.Size=UDim2.new(0,50*scale,0,35*scale); cb.Position=UDim2.new(1,-55*scale,0,0); cb.BackgroundColor3=Color3.fromRGB(255,0,0); cb.Text="X"; cb.TextColor3=Color3.new(1,1,1); cb.TextScaled=true; cb.Font=Enum.Font.GothamBold; cb.Activated:Connect(function() f.Visible=false end)
+local cl=Instance.new("TextLabel",f); cl.Size=UDim2.new(0,150*scale,0,25*scale); cl.Position=UDim2.new(1,-155*scale,0,35*scale); cl.BackgroundTransparency=1; cl.Text="олсс хуеглот"; cl.TextColor3=Color3.new(1,1,1); cl.TextScaled=true; cl.Font=Enum.Font.GothamBold
+
+-- Фразы
+local ph={"п о п л а ч ь le le le le le","п и д о р а с le le le le le le","с у к а а tu le le le le le","т у п и ц a le le le le le","д е б и л le le le le le","м у д а к le le le le le","л о х le le le le le","е ба лай le le le le le","х у й л о le le le le le le le","мать твою в о ч к о le le le le le le","сш сын ш лю хи le le le le le le","ш л юха le le le le le le"}
+local pad=5*scale; local h=(f.Size.Y.Offset-70*scale-pad*(#ph+1))/#ph
+for i,p in ipairs(ph) do
+    local b=Instance.new("TextButton",f)
+    b.Size=UDim2.new(0.9,0,0,h)
+    b.Position=UDim2.new(0.05,0,0,70*scale + pad*i + h*(i-1))
+    b.Text = p; b.TextScaled=true; b.TextWrapped=true
+    b.BackgroundColor3=Color3.fromRGB(80,0,130); b.TextColor3=Color3.new(1,1,1); b.Font=Enum.Font.GothamBold
+    b.Activated:Connect(function() pcall(function() T.TextChannels.RBXGeneral:SendAsync(p) end) end)
+end
+
+-- Перетаскивание для ПК и мобильных
+local drag,di,ds,sp
+local function update(i)local d=i.Position-ds; f.Position=UDim2.new(sp.X.Scale,sp.X.Offset+d.X,sp.Y.Scale,sp.Y.Offset+d.Y) end
+f.InputBegan:Connect(function(i) if i.UserInputType==Enum.UserInputType.MouseButton1 or i.UserInputType==Enum.UserInputType.Touch then drag=true; ds=i.Position; sp=f.Position; i.Changed:Connect(function() if i.UserInputState==Enum.UserInputState.End then drag=false end end) end end)
+f.InputChanged:Connect(function(i) if i.UserInputType==Enum.UserInputType.MouseMovement or i.UserInputType==Enum.UserInputType.Touch then di=i end end)
+U.InputChanged:Connect(function(i) if i==di and drag then update(i) end end)
+
+-- Скрытие через Alt на ПК
+U.InputBegan:Connect(function(i,gp) if gp then return end; if i.KeyCode==Enum.KeyCode.LeftAlt then f.Visible = not f.Visible end end)
+]])()
