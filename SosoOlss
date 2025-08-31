@@ -1,0 +1,169 @@
+-- Roblox LocalScript
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local TextChatService = game:GetService("TextChatService")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+
+-- GUI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "ChatGUI"
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 380, 0, 500)
+frame.Position = UDim2.new(0.3, 0, 0.2, 0)
+frame.BackgroundColor3 = Color3.fromRGB(20, 0, 50)
+frame.BackgroundTransparency = 0.2
+frame.BorderSizePixel = 0
+frame.Parent = screenGui
+
+-- Космос-анимация (фиолетовый космос)
+local starsFrame = Instance.new("Frame")
+starsFrame.Size = UDim2.new(1,0,1,0)
+starsFrame.BackgroundTransparency = 1
+starsFrame.Parent = frame
+
+local stars = {}
+for i = 1, 120 do
+    local star = Instance.new("Frame")
+    star.Size = UDim2.new(0, 2, 0, 2)
+    star.Position = UDim2.new(math.random(),0,math.random(),0)
+    star.BackgroundColor3 = Color3.fromRGB(200 + math.random(55), 100 + math.random(100), 255)
+    star.BorderSizePixel = 0
+    star.BackgroundTransparency = math.random()
+    star.ZIndex = 1
+    star.Parent = starsFrame
+    table.insert(stars, {obj=star, speed=0.001 + math.random()*0.003})
+end
+
+-- Анимация звезд с глубиной и мерцанием
+RunService.RenderStepped:Connect(function()
+    for _, starData in ipairs(stars) do
+        local star = starData.obj
+        local speed = starData.speed
+        star.Position = star.Position + UDim2.new(0,0,speed,0)
+        if star.Position.Y.Scale > 1 then
+            star.Position = UDim2.new(math.random(),0,0,0)
+        end
+        star.BackgroundTransparency = 0.2 + 0.5 * math.sin(tick() * math.random() * 5)
+    end
+end)
+
+-- Заголовок BST
+local title = Instance.new("TextLabel")
+title.Text = "BST"
+title.Size = UDim2.new(1,0,0,35)
+title.Position = UDim2.new(0,0,0,0)
+title.TextScaled = true
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.fromRGB(255,255,255)
+title.Font = Enum.Font.GothamBold
+title.Parent = frame
+
+-- Красный крестик для закрытия
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 50, 0, 35)
+closeButton.Position = UDim2.new(1, -55, 0, 0)
+closeButton.BackgroundColor3 = Color3.fromRGB(255,0,0)
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(255,255,255)
+closeButton.TextScaled = true
+closeButton.Font = Enum.Font.GothamBold
+closeButton.Parent = frame
+
+-- Надпись под крестиком
+local closeLabel = Instance.new("TextLabel")
+closeLabel.Size = UDim2.new(0, 150, 0, 25)
+closeLabel.Position = UDim2.new(1, -155, 0, 35) -- ниже крестика
+closeLabel.BackgroundTransparency = 1
+closeLabel.Text = "олсс хуеглот"
+closeLabel.TextColor3 = Color3.fromRGB(255,255,255)
+closeLabel.TextScaled = true
+closeLabel.Font = Enum.Font.GothamBold
+closeLabel.Parent = frame
+
+closeButton.Activated:Connect(function()
+    frame.Visible = false
+end)
+
+-- Фразы
+local phrases = {
+    "п о п л а ч ь le le le le le",
+    "п и д о р а с le le le le le le",
+    "с у к а а tu le le le le le",
+    "т у п и ц a le le le le le",
+    "д е б и л le le le le le",
+    "м у д а к le le le le le",
+    "л о х le le le le le",
+    "е ба лай le le le le le",
+    "х у й л о le le le le le le le",
+    "мать твою в о ч к о le le le le le le",
+    "сш сын ш лю хи le le le le le le",
+    "ш л юха le le le le le le"
+}
+
+-- Адаптивные кнопки
+local padding = 5
+local buttonHeight = (frame.Size.Y.Offset - 70 - padding * (#phrases + 1)) / #phrases
+
+for i, phrase in ipairs(phrases) do
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0.9,0,0,buttonHeight)
+    button.Position = UDim2.new(0.05,0,0, 70 + padding*i + buttonHeight*(i-1))
+    button.Text = phrase
+    button.TextScaled = true
+    button.TextWrapped = true
+    button.BackgroundColor3 = Color3.fromRGB(80,0,130)
+    button.TextColor3 = Color3.fromRGB(255,255,255)
+    button.Font = Enum.Font.GothamBold
+    button.Parent = frame
+
+    button.Activated:Connect(function()
+        pcall(function()
+            TextChatService.TextChannels.RBXGeneral:SendAsync(phrase)
+        end)
+    end)
+end
+
+-- Перетаскивание GUI (мышь и тач)
+local dragging, dragInput, dragStart, startPos
+local function update(input)
+    local delta = input.Position - dragStart
+    frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+                               startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+frame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        update(input)
+    end
+end)
+
+-- Скрытие/показ GUI Alt
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.LeftAlt then
+        frame.Visible = not frame.Visible
+    end
+end)
