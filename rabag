@@ -69,13 +69,13 @@ cl.TextColor3=Color3.new(1,1,1)
 cl.TextScaled=true
 cl.Font=Enum.Font.GothamBold
 
--- Страницы фраз
+-- Страницы фраз с усиленной маскировкой + le le le…
 local pages={
-    {"п о п л а ч ь le le le le le","п и д о р а с le le le le le le","с у к а а tu le le le le le","т у п и ц a le le le le le","д е б и л le le le le le","м у д а к le le le le le","л о х le le le le лe","е ба лай le le le le le","х у й л о le le le le le le le","мать твою в о ч к о le le le le le le","сш сын ш лю хи le le le le le le","ш л юха le le le le le le"},
-    {"ты г е й le le le le le le le le","х у е г л о т le le le le le le le le le le ле","дочь ш л ю х и дш le le le le le le le le le","м о й х уй в а н а л е т в о е й м а м ы le le le le le le le","тг кидай шалава le le le le le le le le le le"},
-    {"очко твоей мамы широкое le le le le le le le le","у твоей мамы в очке большой член le le le lel el el el","Чикатило прийдет да расчленит твою мать на куски le le le le le le le le le"},
-    {"Твоя мать обкуренная шмара le le le le le le","У дома жди я прийду твою мамашу мертвую в очко драть le le le le le le le le le le","Жди свою мать разрубленную на куски шмару нищую le le le le le le le le le"},
-    {"Чикатило твою мать на прогиб и органы её об землю le le le le le le le","хуеглот соси и мать твоя тоже le le le le le le le"}
+    {"п о п л a ч ь le le le le le le le","п i’ д o р a’ с’’ le le le le le le le","с ү к a’ le le le le le le le","т ү п i ц a’ le le le le le le le","д е б i л’ le le le le le le le","м ү д a к’ le le le le le le le","л о х’ le le le le л e le","е б a л a й’ le le le le le le le","һ ү й л о’ le le le le le le le le","м a т ь т в o ю’ le le le le le le le","с ш с ы н ш л ү х і’ le le le le le le le","ш л ү х a’ le le le le le le le"},
+    {"т ы г e й’ le le le le le le le le","һ ү e г л о т’ le le le le le le le le le le ле","д о ч ь ш л ү х і д ш’ le le le le le le le le le","м о й һ ү й в a н a л e т в o e й м a м ы’ le le le le le le le","т г к и д a й ш a л a в a’ le le le le le le le le"},
+    {"o ч к o т в о е й м a м ы ш и р о к о е’ le le le le le le le","у т в о е й м a м ы в o ч к е б о л ь ш о й ч л е н’ le le le le le le le","Ч и к a т и л о п р и й д е т д а р а с ч л е н и т ь т в о ю м a т ь н a к у с к и’ le le le le le le le"},
+    {"Т в о я м a м a o б к у р е н н a я ш м a р a’ le le le le le le le","У д о м a ж д и я п р и й д у т в о ю м a м a ш y м e р т в у ю в o ч к o д р a т ь’ le le le le le le le","Ж д и с в о ю м a м y р а з р у б л е н н у ю н a к у с к и ш м a р у н и щ у ю’ le le le le le le le"},
+    {"Ч и к a т и л о т в о ю м a м y н a п р о г и б і о р г a н ы ё об з е м л ю’ le le le le le le le","һ ү e г л o т с о с и і м a м a т в o я т о ж е’ le le le le le le le"}
 }
 
 local currentPage=1
